@@ -1,0 +1,8 @@
+const nav=document.getElementById('nav'), menuBtn=document.getElementById('menuBtn');
+menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const filters=[...document.querySelectorAll('.filter')],cards=[...document.querySelectorAll('.recipe')],search=document.getElementById('search'),noResults=document.getElementById('noResults');let active='todas';
+function update(){let count=0;cards.forEach(c=>{const q=search.value.trim().toLocaleLowerCase('es');const ok=(active==='todas'||c.dataset.tags.split(' ').includes(active))&&(!q||(c.dataset.search+' '+c.innerText).toLocaleLowerCase('es').includes(q));c.hidden=!ok;if(ok)count++});noResults.hidden=count>0}
+filters.forEach(b=>b.addEventListener('click',()=>{active=b.dataset.filter;filters.forEach(f=>f.classList.toggle('active',f===b));update()}));
+document.getElementById('searchForm').addEventListener('submit',e=>{e.preventDefault();active='todas';filters.forEach(f=>f.classList.toggle('active',f.dataset.filter==='todas'));update();document.getElementById('recetas').scrollIntoView({behavior:'smooth'})});search.addEventListener('input',update);
+const dialog=document.getElementById('dialog');document.querySelectorAll('.detail').forEach(b=>b.addEventListener('click',()=>{document.getElementById('dTitle').textContent=b.dataset.title;document.getElementById('dIngredients').textContent=b.dataset.ingredients;document.getElementById('dSteps').textContent=b.dataset.steps;dialog.showModal()}));document.getElementById('close').onclick=()=>dialog.close();document.getElementById('done').onclick=()=>dialog.close();
